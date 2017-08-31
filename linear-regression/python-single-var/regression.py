@@ -16,20 +16,20 @@ x_train = d['fixed acidity'].head(300)
 y_train = d['density'].head(300)
 '''     
 
-d = pd.read_csv('data.csv')
+d = pd.read_csv('data.csv').values
 
 
 ones = np.ones((len(d),1))
-x_train = d.iloc[:,0:1]
+x_train = d[:,0:1]
 x_train = np.concatenate((ones,x_train),1)
-y_train = d.iloc[:,1:2]
 
-J = None
+y_train = d[:,1:2]
+
 
 def computeError(theta, x_data, y_data):
-
-    return ((np.dot(x_data, theta) - y_data) ** 2).sum() / (2 * len(x_data))
-
+    
+    h = x_data.dot(theta) - y_data
+    return (np.transpose(h).dot(h)) / (2 * len(x_data))
     
 def costFunction(theta, y_train, x_train, learning_rate, iterations):
         
