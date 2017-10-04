@@ -18,13 +18,11 @@ y_train = d['density'].head(300)
 
 d = pd.read_csv('data.csv').values
 
-
 ones = np.ones((len(d),1))
 x_train = d[:,0:1]
 x_train = np.concatenate((ones,x_train),1)
 
 y_train = d[:,1:2]
-
 
 def computeError(theta, x_data, y_data):
     
@@ -38,14 +36,12 @@ def costFunction(theta, y_train, x_train, learning_rate, iterations):
         
     return theta
 
-
 def graph(formula, x_range):  
     x = np.array(x_range)
     y = formula(x)
 
     plt.plot(x,y)  
 
-    
 def graphResult(value0, value1, graph_range):
     plt.title('Linear Regression')
     plt.xlabel('X Training Data')
@@ -54,11 +50,7 @@ def graphResult(value0, value1, graph_range):
     graph(lambda x : value0 + value1 * x, graph_range)
     plt.show();
     
-    
-
-
 def main():
-    
     
     start = time.time()
     

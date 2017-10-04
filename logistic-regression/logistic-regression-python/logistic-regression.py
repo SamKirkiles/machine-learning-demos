@@ -13,13 +13,6 @@ X = data[:,0:2]
 
 y = data[:,2:3]
 
-plt.scatter(data[:,1][np.where(data[:,2] == 1.0)], data[:,0][np.where(data[:,2] == 1.0)], alpha=1, color="b", label="y = 1", marker="o")
-plt.scatter(data[:,1][np.where(data[:,2] == 0.0)], data[:,0][np.where(data[:,2] == 0.0)], alpha=1, color="k", label="y = 0", marker="x")
-plt.legend();
-plt.show()
-
-
-
 #This function will create more features using the ones we already have to create
 #a good polynomial that fits the function well
 def mapFeature(x1, x2, degree):
@@ -51,27 +44,14 @@ def costFunction(theta, X_mapped, y, _lambda):
 def sigmoid(z):
     return 1 /( 1 + np.power(math.e, z))
 
+def scatter(data):
+    plt.scatter(data[:,1][np.where(data[:,2] == 1.0)], data[:,0][np.where(data[:,2] == 1.0)], alpha=1, color="b", label="y = 1", marker="o")
+    plt.scatter(data[:,1][np.where(data[:,2] == 0.0)], data[:,0][np.where(data[:,2] == 0.0)], alpha=1, color="k", label="y = 0", marker="x")
+    plt.legend();
+    plt.show()
 
 
-def main():
-    print("Starting Logistic Classification")
-
-    features = mapFeature(X[:,0:1], X[:,1:2],6);
-
-    theta = np.zeros([features.shape[1],1])
-    print("initial: ", costFunction(theta, features, y, 1))
-    
-    res = minimize(costFunction, theta, args=(features,y,1), options={"maxiter":100, "disp":False})
-    print("The minimized values are:")
-    print(res['x']);
-    
-    final_theta = np.reshape(res['x'], [28,1])
-    
-    p = sigmoid(np.transpose(final_theta).dot(np.transpose(features))) >= 0.5
-    p = np.transpose(p)
-
-    print('Final Accuracy: ', np.mean(p == y) * 100)
-    
+def graphBoundary(data, final_theta):
     plt.scatter(data[:,1][np.where(data[:,2] == 1.0)], data[:,0][np.where(data[:,2] == 1.0)], alpha=1, color="b", label="y = 1", marker="o")
     plt.scatter(data[:,1][np.where(data[:,2] == 0.0)], data[:,0][np.where(data[:,2] == 0.0)], alpha=1, color="k", label="y = 0", marker="x")
     
@@ -85,14 +65,36 @@ def main():
         for j in range(len(y_contour)):
             test_features = mapFeature(np.array([x_contour[i]]),np.array([y_contour[j]]), 6)
             z[i][j] = np.dot(final_theta.T, test_features.T)
-    
-    
+        
     plt.contour(x_contour, y_contour, z,[0])
-
     
     plt.legend();
     plt.show()
+
+def main():
+    print("Starting Logistic Classification")
     
-    return z
+    scatter(data)
+
+    features = mapFeature(X[:,0:1], X[:,1:2],6);
+
+    #initial theta
+    theta = np.zeros([features.shape[1],1])
+    print("initial: ", costFunction(theta, features, y, 1))
+    
+    #minimize the cost function using scipy minimize
+    res = minimize(costFunction, theta, args=(features,y,1), options={"maxiter":100, "disp":False})
+    
+    print("The minimized values of theta are:")
+    print(res['x']);
+    
+    final_theta = np.reshape(res['x'], [28,1])
+    #calculate the predicted values
+    p = sigmoid(np.transpose(final_theta).dot(np.transpose(features))) >= 0.5
+    p = np.transpose(p)
+
+    print('Final Accuracy: ', np.mean(p == y) * 100)
+    
+    graphBoundary(data, final_theta)
     
 if __name__ == "__main__": main()
