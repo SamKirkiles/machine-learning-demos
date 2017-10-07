@@ -47,7 +47,6 @@ J = (((-y)' * log(h) - (1 - y)' * log(1 - h))/m) + ((lambda/(2 * m)) * sum(temp 
 grad = ((X' * (h - y))/m);
 
 grad = grad + ((lambda/m) * temp);
-size(grad)
 
 % =============================================================
 
