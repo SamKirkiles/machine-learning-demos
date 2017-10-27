@@ -8,7 +8,7 @@ import time
 
 # This is the old data that didn't really have a linear correlation
 '''
-d = pd.read_csv('wine-quality.csv')
+d = pd.read_csv('wine-quality.csv')ma
 d = d[d.columns[:]].iloc[:].sort_values(by='fixed acidity', axis=0, ascending=True, inplace=False)
 d['density'] = d['density'].map(lambda x: 100*x);
 

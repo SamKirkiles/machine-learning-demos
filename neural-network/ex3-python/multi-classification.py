@@ -8,17 +8,17 @@ Created on Fri Oct  6 22:27:46 2017
 
 import math;
 import numpy as np;
-import scipy.io as sio
-import matplotlib.pyplot as plt
+import scipy.io as sio;
+import matplotlib.pyplot as plt;
+from scipy.optimize import minimize;
 
 contents = sio.loadmat('ex3data1.mat');
 X = np.asarray(contents['X']);
 y = contents['y'];
 
-
 def drawImg(input_matrix):
     #visualize the data
-    #expect 400 features
+    #expect 400 features or perfect square
     
     plt.close();
     plt.set_cmap("gray");
@@ -47,10 +47,66 @@ def drawImg(input_matrix):
     plt.show()
 
 
+def sigmoid(z):
+    # z should be h(X) = X * theata
+    return 1 /( 1 + np.exp(-z))
+
+def costFunction(theta, X_term, y_term, _lambda):
+    
+    theta = np.reshape(theta, (400,1))
+
+    m = y_term.shape[0]
+    h = sigmoid(X_term.dot(theta))
+    
+    term1 = (y_term * -1).T.dot(np.log(h));
+    term2 = (1.-y_term).T.dot(np.log(1.-h));
+    cost = (float(term1)-float(term2))/m
+    regterm = (_lambda/(2 * m)) * np.sum(theta ** 2)
+    J = cost + regterm
+    
+    #calculate the gradient
+    
+    grad = (X_term.T.dot((h - y_term))/m);
+    
+    grad = np.add(grad, ((_lambda/m) * theta));    
+    grad = grad.flatten()
+
+    return float(J), grad
+
+    
+def oneVsAll(_X,_y,num_labels,_theta,_lambda):
+    
+    n = _X.shape[1];
+
+    initial_theta = np.zeros([n,1])
+    
+    initial_theta = np.ndarray.flatten(initial_theta)
+
+    
+    for c in range(1,num_labels + 1):
+        
+        print()
+        print("optimizing for " , c)
+                
+        args = (_X, (_y == c), 3) 
+        res = minimize(costFunction, x0=initial_theta, jac=True, args=args, method='BFGS', options={'maxiter':1000});
+        print(res);
+        
+
 def main():
     print("Starting multi-class classification");
-    random = np.random.randint(5000, size=64)
+    
+    # show the a visualization of the data
+    random = np.random.randint(5000, size=100)
     drawImg(X[random,:]);
     
+    # find intial cost function
+    all_theta = np.zeros((X.shape[1], 1))
     
-if __name__ == "__main__": main()
+    cost, grad = costFunction(all_theta, X, y, 3)
+    print(cost)
+
+    oneVsAll(X, y, 10, all_theta, 3);
+    
+    
+if __name__ == "__main__": main()   
