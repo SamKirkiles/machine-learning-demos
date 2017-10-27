@@ -81,20 +81,34 @@ def oneVsAll(_X,_y,num_labels,_theta,_lambda):
     initial_theta = np.zeros([n,1])
     
     initial_theta = np.ndarray.flatten(initial_theta)
+    
+    all_theta = np.zeros((num_labels,n));
 
     
     for c in range(1,num_labels + 1):
         
         print()
-        print("optimizing for " , c)
+        print("Optimizing for " , c)
                 
         args = (_X, (_y == c), 3) 
         res = minimize(costFunction, x0=initial_theta, jac=True, args=args, method='BFGS', options={'maxiter':1000});
         print(res);
+        all_theta[c - 1,:] = res['x'];
         
+    return all_theta;
+    
+def predictOneVsAll(all_theta, X):
+    
+    predictions = sigmoid(X.dot(all_theta.T))
+    
+    return predictions
 
 def main():
     print("Starting multi-class classification");
+    print();
+    print("Drawing random training examples...")
+    
+    
     
     # show the a visualization of the data
     random = np.random.randint(5000, size=100)
@@ -104,9 +118,18 @@ def main():
     all_theta = np.zeros((X.shape[1], 1))
     
     cost, grad = costFunction(all_theta, X, y, 3)
-    print(cost)
+    print("Testing cost function with initial cost of: ", cost )
+    
+    computed_theta = oneVsAll(X, y, 10, all_theta, 3);
+    
+    predictions = np.argmax(predictOneVsAll(computed_theta, X), axis=1) + 1
+    
+    predictions = np.reshape(predictions, (5000,1))
+    
+    accuracy = (np.sum(predictions == y)/y.size) * 100
+    
+    print("Successfully trained model with ", accuracy, "% accuracy.")
 
-    oneVsAll(X, y, 10, all_theta, 3);
     
     
 if __name__ == "__main__": main()   
