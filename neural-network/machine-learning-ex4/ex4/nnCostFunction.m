@@ -62,22 +62,24 @@ Theta2_grad = zeros(size(Theta2));
 %               and Theta2_grad from Part 2.
 %
 
+% Complete forward propagation
+% a means the activation of a layer and z means multiplying x by theta
+a1 = [ones(m,1) X];
+z2 = a1 * Theta1';
+a2 = [ones(m,1) sigmoid(z2)];
+z3 = a2 * Theta2';
+a3 = sigmoid(z3);
 
+% a3 shape is 5000 x 10
+% y shape is 5000 x 1
 
+% Multiply identity matrix by y
+Y = eye(num_labels)(y,:);
 
+% We have to use .* (element wise) because y and a3 are not vectors like they were for logistic classifciation and J must be a scalar.
+% Because they are not vectors, we cannot easily do 1 x m * m x 1 to get a scalar. Instaed, we must use element wise multiplication add twice sum the result.
 
-
-
-
-
-
-
-
-
-
-
-
-
+J = sum(sum(-Y .* log(a3) - (1 - Y) .* log(1-a3)))/m;
 
 
 % -------------------------------------------------------------
