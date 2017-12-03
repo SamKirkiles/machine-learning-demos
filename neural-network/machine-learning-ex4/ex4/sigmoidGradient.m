@@ -15,9 +15,10 @@ g = zeros(size(z));
 
 
 
+% Use element-wise multiplication to find derivative of the sigmoid function
 
-
-
+s = sigmoid(z);
+g = s.*(1-s);
 
 
 

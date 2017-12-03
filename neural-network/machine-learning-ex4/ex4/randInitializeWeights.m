@@ -20,8 +20,8 @@ W = zeros(L_out, 1 + L_in);
 %
 
 
-
-
+epsiolon_init = 0.12;
+w = rand(L_out, 1 + L_in) * 2 * epsiolon_init - epsiolon_init;
 
 
 

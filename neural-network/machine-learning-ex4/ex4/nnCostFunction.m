@@ -81,6 +81,9 @@ Y = eye(num_labels)(y,:);
 
 J = sum(sum(-Y .* log(a3) - (1 - Y) .* log(1-a3)))/m;
 
+regterm = lambda/(2*m) * (sum(sum(Theta1(:, 2:end) .^ 2)) + sum(sum(Theta2(:, 2:end) .^ 2)));
+
+J += regterm;
 
 % -------------------------------------------------------------
 
