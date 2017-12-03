@@ -38,7 +38,7 @@ def costFunction(theta, X_mapped, y, _lambda):
     term1 = ((np.transpose(-y).dot(np.log(h))))
     term2 = np.transpose((1 - y)).dot(np.log(1-h))
     regterm = ((_lambda/(2 * m)) * np.sum(np.power(theta[1:,:], 2)))
-    J = (term1 - term2) * 1/m + regterm
+    J = (term1 - term2) * 1/m + regterm # prevents overfitting
     return float(J)    
 
 def sigmoid(z):

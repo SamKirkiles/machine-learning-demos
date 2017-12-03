@@ -46,7 +46,27 @@ def drawImg(input_matrix):
     plt.imshow(output);
     plt.show()
 
+def testModel(computed_theta, X_test):
+    # take the theta and X and compute predictions for X
+    
+    
+    global predictions
+    predictions = predictOneVsAll(computed_theta, X_test)
+    predictions = np.argmax(predictions, axis=1) + 1
+    predictions = np.reshape(predictions, (predictions.shape[0],1));
 
+    
+    for x in range(0, X_test.shape[0]):   
+        print("Predicted Value: ", int(predictions[x]))
+
+        plt.close();
+        plt.set_cmap("gray");
+        plt.imshow(X_test[x,:].reshape(20,20).T);
+        plt.show()
+
+
+
+    
 def sigmoid(z):
     # z should be h(X) = X * theata
     return 1 /( 1 + np.exp(-z))
@@ -103,12 +123,11 @@ def predictOneVsAll(all_theta, X):
     
     return predictions
 
+
 def main():
     print("Starting multi-class classification");
     print();
     print("Drawing random training examples...")
-    
-    
     
     # show the a visualization of the data
     random = np.random.randint(5000, size=100)
@@ -121,15 +140,23 @@ def main():
     print("Testing cost function with initial cost of: ", cost )
     
     computed_theta = oneVsAll(X, y, 10, all_theta, 3);
-    
+        
     predictions = np.argmax(predictOneVsAll(computed_theta, X), axis=1) + 1
     
     predictions = np.reshape(predictions, (5000,1))
     
+    
     accuracy = (np.sum(predictions == y)/y.size) * 100
     
+    print();
     print("Successfully trained model with ", accuracy, "% accuracy.")
-
+    print();
+    print("Testing theta with random training example")
+    
+    X_test = X[np.random.randint(5000,size = 3),:];
+    
+    testModel(computed_theta, X_test);
     
     
-if __name__ == "__main__": main()   
+    
+if __name__ == "__main__": main()

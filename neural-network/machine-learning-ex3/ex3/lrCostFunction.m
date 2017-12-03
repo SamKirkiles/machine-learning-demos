@@ -40,11 +40,11 @@ grad = zeros(size(theta));
 h = sigmoid(X * theta);
 
 temp = theta;
+temp(1) = 0;
 
 J = (((-y)' * log(h) - (1 - y)' * log(1 - h))/m) + ((lambda/(2 * m)) * sum(temp .^ 2));
 
 grad = ((X' * (h - y))/m);
-
 
 grad = grad + ((lambda/m) * temp);
 

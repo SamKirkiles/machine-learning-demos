@@ -64,7 +64,7 @@ def main():
     #for each number in iterations run the cost function
     
     theta = costFunction(theta, y_train, x_train, learning_rate, iterations)
-    
+        
     graphResult(theta[0,0], theta[1,0],range(int(x_train[:,1:2].min()), int(x_train[:,1:2].max())))
     J = computeError(theta,x_train,y_train)
     
