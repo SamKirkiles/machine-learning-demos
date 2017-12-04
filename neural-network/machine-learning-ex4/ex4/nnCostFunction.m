@@ -97,8 +97,11 @@ delta2 = delta2(:, 2:end);
 
 % There was a problem here where I had delta2 and delta3 reversed
 
-Theta1_grad = (1/m) .* (delta2' * a1);
-Theta2_grad = (1/m) .* (delta3' * a2);
+Theta1_regterm = (lambda/m) .*  [zeros(size(Theta1,1),1) Theta1(:,2:end)];
+Theta2_regterm = (lambda/m) .*  [zeros(size(Theta2,1),1) Theta2(:,2:end)];
+
+Theta1_grad = (1/m) .* (delta2' * a1) + Theta1_regterm;
+Theta2_grad = (1/m) .* (delta3' * a2) + Theta2_regterm;
 
 
 % -------------------------------------------------------------
