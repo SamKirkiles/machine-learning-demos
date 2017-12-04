@@ -64,6 +64,8 @@ Theta2_grad = zeros(size(Theta2));
 
 % Complete forward propagation
 % a means the activation of a layer and z means multiplying x by theta
+% No need to pass a1 through activation function
+
 a1 = [ones(m,1) X];
 z2 = a1 * Theta1';
 a2 = [ones(m,1) sigmoid(z2)];
@@ -83,7 +85,21 @@ J = sum(sum(-Y .* log(a3) - (1 - Y) .* log(1-a3)))/m;
 
 regterm = lambda/(2*m) * (sum(sum(Theta1(:, 2:end) .^ 2)) + sum(sum(Theta2(:, 2:end) .^ 2)));
 
+% Add regularization to the regterm. This will do nothing when lambda equals 0
 J += regterm;
+
+% Backpropagation 
+
+
+delta3 = (a3 .- Y);
+delta2 = ((delta3 * Theta2) .* sigmoidGradient([ones(size(z2, 1), 1) z2]));
+delta2 = delta2(:, 2:end);
+
+% There was a problem here where I had delta2 and delta3 reversed
+
+Theta1_grad = (1/m) .* (delta2' * a1);
+Theta2_grad = (1/m) .* (delta3' * a2);
+
 
 % -------------------------------------------------------------
 
