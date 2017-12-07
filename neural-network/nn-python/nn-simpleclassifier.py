@@ -24,7 +24,7 @@ def costFunction(input_layer_size, hidden_layer_size, X_term, y_term):
     J = 0
     rand_seed = 10;
     
-    m = X_term.shape[0];
+    #using simple sum of square error cost function sum((h(x)-y)^2)/2
     
     # X_term shape is (4,3)
     # Theta1 shape is (3(hidden layer),3(input layer))
@@ -33,7 +33,7 @@ def costFunction(input_layer_size, hidden_layer_size, X_term, y_term):
     np.random.seed(rand_seed);
     theta1 = randInitializeWeights(hidden_layer_size,input_layer_size);
 
-    np.random.seed(rand_seed * 1343)
+    np.random.seed(rand_seed * 20)
     theta2 = randInitializeWeights(hidden_layer_size,1);
     
     print()
@@ -86,7 +86,6 @@ def main():
     
     input_layer_size = 3;
     hidden_layer_size = 3;
-    num_labels = 1;
     
     # Create Training set
     # This network will contain 3 features a 3 neuron hidden layer, 1 neuron output layer
