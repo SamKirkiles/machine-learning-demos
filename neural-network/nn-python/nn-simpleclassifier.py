@@ -19,7 +19,7 @@ def randInitializeWeights(size_in, size_out):
     W = 2 * np.random.rand(size_out, 1 + size_in) - 1;
     return W
 
-def costFunction(input_layer_size, hidden_layer_size, X_term, y_term, _lambda):
+def costFunction(input_layer_size, hidden_layer_size, X_term, y_term):
     
     J = 0
     rand_seed = 10;
@@ -101,7 +101,7 @@ def main():
     
     y = np.array([[1],[0],[1],[0]]);
     
-    J, out = costFunction(3, 3, X, y, 0);  
+    J, out = costFunction(input_layer_size, hidden_layer_size, X, y);  
     
     print()
     print("Predictions:")
