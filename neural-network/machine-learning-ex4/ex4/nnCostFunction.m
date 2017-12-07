@@ -72,7 +72,6 @@ a2 = [ones(m,1) sigmoid(z2)];
 z3 = a2 * Theta2';
 a3 = sigmoid(z3);
 
-% a3 shape is 5000 x 10
 % y shape is 5000 x 1
 
 % Multiply identity matrix by y
