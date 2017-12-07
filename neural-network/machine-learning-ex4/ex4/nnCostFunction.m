@@ -89,7 +89,6 @@ J += regterm;
 
 % Backpropagation 
 
-
 delta3 = (a3 .- Y);
 delta2 = ((delta3 * Theta2) .* sigmoidGradient([ones(size(z2, 1), 1) z2]));
 delta2 = delta2(:, 2:end);
