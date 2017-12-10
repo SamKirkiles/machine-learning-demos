@@ -20,14 +20,18 @@ grad = zeros(size(theta));
 %
 
 
+% regularized cost function
 
 
+h = X * theta;
 
+theta0 = [0; theta(2:end)];
+regterm = (lambda) * (sum(theta0.^2))/(2*m);
+J = sum((h - y).^2)/(2*m) + regterm;
 
+% gradient
 
-
-
-
+grad = (1/m) * (X' * (h - y) + lambda * theta0);
 
 
 % =========================================================================
