@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
 
-# This was a pretty garbage nerual network to be honest, I messed up many times but now get it (sort of) I will come back 
-# to clean up the code
-
 import numpy as np;
 
 def sigmoid(z):
@@ -84,8 +81,6 @@ def costFunction(input_layer_size, hidden_layer_size, X_term, y_term):
 def main():
     print("Starting NN Classifier")
     
-    input_layer_size = 3;
-    hidden_layer_size = 3;
     
     # Create Training set
     # This network will contain 3 features a 3 neuron hidden layer, 1 neuron output layer
@@ -99,6 +94,10 @@ def main():
     # Classifications of size 4,1 
     
     y = np.array([[1],[0],[1],[0]]);
+    
+    input_layer_size = 3;
+    hidden_layer_size = 3;
+
     
     J, out = costFunction(input_layer_size, hidden_layer_size, X, y);  
     
