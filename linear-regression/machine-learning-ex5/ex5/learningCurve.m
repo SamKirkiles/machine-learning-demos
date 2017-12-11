@@ -54,9 +54,16 @@ error_val   = zeros(m, 1);
 % ---------------------- Sample Solution ----------------------
 
 
+% We need to train the model for different amounts of training examples to see if we have high bias or high variance
+
+for i = 1:m
+    theta = trainLinearReg(X(1:i,:),y(1:i),lambda);
+    error_train(i) = linearRegCostFunction(X(1:i,:), y(1:i), theta, 0);
+    error_val(i) = linearRegCostFunction(Xval, yval, theta, 0);
+end
 
 
-
+% turns out we have high bias so we should try fitting some polynomial features to the data
 
 
 % -------------------------------------------------------------
