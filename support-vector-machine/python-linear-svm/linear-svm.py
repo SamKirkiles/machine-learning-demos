@@ -9,7 +9,7 @@ import cvxopt.solvers;
 # Langerian svm on data set without kernels
 
 # Create training data with two features and binary classification
-X,y = make_classification(n_samples=100, n_redundant=0, class_sep=1.0, n_informative=1, n_features=2, n_clusters_per_class=1, random_state=5);
+X,y = make_classification(n_samples=100, n_redundant=0, class_sep=2.0, n_informative=1, n_features=2, n_clusters_per_class=1, random_state=30);
 
 #Show a scatter plot of our data
 plt.scatter(X[:,0][np.where(y == 1.0)], X[:,1][np.where(y == 1.0)], marker='o', c='#4e71c9');
@@ -56,6 +56,17 @@ def compute_b(w, X, y):
 b = compute_b(w,X,y);
 
 p = ((X.dot(w)) >= 0).reshape(m,1);
+
+x_contour = np.linspace(np.min(X[:,0]),np.max(X[:,0]),1000);
+y_contour = np.linspace(np.min(X[:,1]),np.max(X[:,1]),1000);
+
+z = np.zeros((len(x_contour),len(y_contour)))
+
+for i in range(len(x_contour)):
+    for j in range(len(y_contour)):
+            z[i][j] = (x_contour[i] * w[0] + y_contour[j] * w[1]) >= 0
+            
+plt.contour(x_contour,y_contour,z.T,[0]);
 
 plt.show();
 
