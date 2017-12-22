@@ -15,7 +15,6 @@ import cvxopt.solvers;
 X,y = make_gaussian_quantiles(mean=None, cov=1.0, n_samples=100, n_features=2, n_classes=2, shuffle=True, random_state=5);
 
 y[y==0] = -1
-hard = False;
 C = 0.4;
 
 #Show a scatter plot of our data
@@ -25,15 +24,25 @@ plt.scatter(X[:,0][np.where(y == -1.0)], X[:,1][np.where(y == -1.0)], marker='o'
 m = X.shape[0];
 y = np.reshape(y,(m,1));
 
+poly_kernel = False
+
 # We must find the extrema of the function in the form 1/2*a'Pa-q'x subject to constraints
 
-# Kernel function
-# TODO: Add more kernel types 
+# Kernel function if poly is true will compute polynomial kernel otherwise gaussian
 
-def polynomial_kernel(a,b,d=20):
-    return np.inner(a,b) ** d;
+def kernel(a,b,d=20,poly=True,sigma=0.5):
+    if (poly):
+        return np.inner(a,b) ** d;
+    else:
+        return np.exp(-np.linalg.norm((a - b) ** 2)/sigma**2)
 
-K = polynomial_kernel(X,X);
+
+# K must be a gram matrix whichi is all possible combinations of X and y
+
+K = np.array([kernel(X[i], X[j],poly=poly_kernel) 
+    for j in range(m)
+    for i in range(m)]).reshape((m, m))
+
 P = cvxopt.matrix(y.dot(y.T) * K);
 q = cvxopt.matrix(-1.0 * np.ones((m)));
 
@@ -72,39 +81,38 @@ b /= len(multipliers);
 
 # We do not have a weight vector and now we need to compute the nonlinear decision boundary
 
-preds = polynomial_kernel(support_vectors,X)
 
 p = np.zeros(len(X))
 for i in range(len(X)):
     s = 0
     for a, sv_y, sv in zip(sv_multipliers, support_vectors_y, support_vectors):
-        s += a * sv_y * polynomial_kernel(X[i], sv)
+        s += a * sv_y * kernel(X[i], sv,poly=poly_kernel)
     p[i] = s
 
 p = np.sign(p + b)
 
 p = p.reshape(p.shape[0],1)
 
-
 # TODO: Vectorize this method
 #Plot decision boundary
+print("Accuracy: ", np.mean(p == y) * 100)
+print();
+print("Plotting decision boundary...");
 
 x_contour = np.linspace(np.min(X[:,0]),np.max(X[:,0]),200);
 y_contour = np.linspace(np.min(X[:,1]),np.max(X[:,1]),200);
 
 z = np.zeros((len(x_contour),len(y_contour)))
 
+# do another one of these gram matrices
 for i in range(len(x_contour)):
     for j in range(len(y_contour)):
-            s = 0
-            for a, sv_y, sv in zip(sv_multipliers, support_vectors_y, support_vectors):
-                s += a * sv_y * polynomial_kernel(np.array([x_contour[i],y_contour[j]]), sv)
-            z[i][j] = np.sign(s + b)
+        s = 0; 
+        for a, sv_y, sv in zip(sv_multipliers, support_vectors_y, support_vectors):
+            s += a * sv_y * kernel(np.array([x_contour[i],y_contour[j]]), sv, poly=poly_kernel)
+        z[i][j] = np.sign(s + b)
             
 plt.contour(x_contour,y_contour,z.T,[0]);
 
-
-
 plt.show();
 
-print("Accuracy: ", np.mean(p == y) * 100)
