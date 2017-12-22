@@ -23,12 +23,28 @@ sigma = 0.3;
 %        mean(double(predictions ~= yval))
 %
 
+values = [0.01 0.03 0.1 0.3 1 3 10 30];
+error = Inf;
 
+%This code is commented becauae it takes a long time but values have been retrieved and assigned 
+%for tc = values
+%    for s = values
 
+%        model= svmTrain(X, y, tc, @(x1, x2) gaussianKernel(x1, x2, s));
+%        predictions = svmPredict(model,Xval);
 
+%       temperror = mean(double(predictions ~= yval));
 
+%        if temperror < error
+%            error = temperror;
+%            C = tc;
+%            sigma = s; 
+%        end
+%    end
+%end
 
-
+C =  1;
+sigma =  0.10000;
 % =========================================================================
 
 end

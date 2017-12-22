@@ -29,7 +29,8 @@ y = np.reshape(y,(m,1));
 
 # Kernel function
 # TODO: Add more kernel types 
-def polynomial_kernel(a,b,d=16):
+
+def polynomial_kernel(a,b,d=20):
     return np.inner(a,b) ** d;
 
 K = polynomial_kernel(X,X);
