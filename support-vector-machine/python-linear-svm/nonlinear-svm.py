@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt;
 import numpy as np;
 from cvxopt.solvers import qp;
 import cvxopt.solvers;
+from datetime import datetime 
 
 
 # Langerian svm on data set with kernels
@@ -30,6 +31,10 @@ poly_kernel = False
 
 # Kernel function if poly is true will compute polynomial kernel otherwise gaussian
 
+print("Training...")
+startTime= datetime.now() 
+
+
 def kernel(a,b,d=20,poly=True,sigma=0.5):
     if (poly):
         return np.inner(a,b) ** d;
@@ -40,7 +45,7 @@ def kernel(a,b,d=20,poly=True,sigma=0.5):
 # K must be a gram matrix whichi is all possible combinations of X and y
 
 K = np.array([kernel(X[i], X[j],poly=poly_kernel) 
-    for j in range(m)
+    for j in range(m)   
     for i in range(m)]).reshape((m, m))
 
 P = cvxopt.matrix(y.dot(y.T) * K);
@@ -89,13 +94,18 @@ for i in range(len(X)):
         s += a * sv_y * kernel(X[i], sv,poly=poly_kernel)
     p[i] = s
 
-p = np.sign(p + b)
+p = np.sign(p + b)  
 
 p = p.reshape(p.shape[0],1)
 
 # TODO: Vectorize this method
 #Plot decision boundary
 print("Accuracy: ", np.mean(p == y) * 100)
+# Time elapsed
+timeElapsed=datetime.now()-startTime 
+print("Time elapsed ",int(timeElapsed.seconds/60), "m", timeElapsed.seconds - (60 * int(timeElapsed.seconds/60)), "s", timeElapsed.microseconds, "ms")
+startTime= datetime.now() 
+
 print();
 print("Plotting decision boundary...");
 
@@ -115,4 +125,7 @@ for i in range(len(x_contour)):
 plt.contour(x_contour,y_contour,z.T,[0]);
 
 plt.show();
+timeElapsed=datetime.now()-startTime 
+print("Time elapsed ",int(timeElapsed.seconds/60), "m", timeElapsed.seconds - (60 * int(timeElapsed.seconds/60)), "s", timeElapsed.microseconds, "ms")
+
 
