@@ -8,7 +8,8 @@ import cvxopt.solvers;
 from datetime import datetime 
 
 # Change parameters here
-C = 0.77;
+# TODO: poly_kernel vectorized is broken
+C = 0.3;
 poly_kernel = False
 vectorized = True
 
@@ -40,7 +41,7 @@ def kernel(a,b,d=20,poly=True,sigma=0.6):
     if (poly):
         return np.inner(a,b) ** d;
     else:
-        return np.exp(-np.sqrt(np.sum(((a-b) ** 4), axis=0))/sigma**2)
+        return np.exp(-np.sum(np.sqrt(((a-b) ** 4))/sigma**2, axis=0))
     
 def kernel_v(X,Y,d=20,poly=True,sigma=0.6,gram=False):
     if (poly):
@@ -52,8 +53,8 @@ def kernel_v(X,Y,d=20,poly=True,sigma=0.6,gram=False):
         T += np.add.outer(np.einsum('ij,ij->i',X2,X2),np.einsum('ij,ij->i',Y2,Y2));
         return np.exp(-np.sqrt(np.maximum(0,T))/sigma ** 2);
     else:
-        s = np.sum((np.subtract(X,Y) ** 4), axis=1)[:,None]
-        return np.exp(-np.sqrt(s)/sigma**2)
+        s = np.sqrt((np.subtract(X,Y) ** 4))
+        return np.exp(-np.sum(s, axis=1)[:,None]/sigma**2)
 
     
 
