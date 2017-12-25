@@ -29,6 +29,8 @@ for i in range(0,1000):
     
     tempc = c
     
+    #Issue is coming from here
+    
     for j in range(0,k):
         X_out[:,j] = np.sum(np.sqrt(np.subtract(X,tempc[j,0:2])**4),axis=1)
         y_out[:,0] = np.asarray([X_out[:,0]>X_out[:,1]])
