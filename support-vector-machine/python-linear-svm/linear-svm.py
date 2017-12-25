@@ -9,7 +9,7 @@ import cvxopt.solvers;
 # Langerian svm on data set without kernels
 
 # Create training data with two features and binary classification
-X,y = make_classification(n_samples=100, n_redundant=0, class_sep=1.5, n_informative=1, n_features=2, n_clusters_per_class=1, random_state=345);
+X,y = make_classification(n_samples=100, n_redundant=0, class_sep=1.0, n_informative=1, n_features=2, n_clusters_per_class=1, random_state=9);
 
 y[y==0] = -1
 hard = False;
@@ -58,7 +58,7 @@ support_vectors_y = y[has_positive_multiplier]
 def compute_w(multipliers, X, y):
     return np.sum(multipliers[i] * y[i] * X[i] for i in range(len(y)),)
 
-normw = compute_w(multipliers, X, y);
+#w = compute_w(multipliers, X, y);
 w = compute_w(sv_multipliers, support_vectors, support_vectors_y)
 
 def compute_b(w, X, y):

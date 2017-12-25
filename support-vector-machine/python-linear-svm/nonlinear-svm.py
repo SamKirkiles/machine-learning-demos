@@ -8,7 +8,7 @@ import cvxopt.solvers;
 from datetime import datetime 
 
 # Change parameters here
-C = 0.4;
+C = 0.77;
 poly_kernel = False
 vectorized = True
 
@@ -36,13 +36,13 @@ y = np.reshape(y,(m,1));
 print("Training...")
 startTime= datetime.now() 
 
-def kernel(a,b,d=20,poly=True,sigma=0.5,):
+def kernel(a,b,d=20,poly=True,sigma=0.6):
     if (poly):
         return np.inner(a,b) ** d;
     else:
         return np.exp(-np.sqrt(np.sum(((a-b) ** 4), axis=0))/sigma**2)
     
-def kernel_v(X,Y,d=20,poly=True,sigma=0.5,gram=False):
+def kernel_v(X,Y,d=20,poly=True,sigma=0.6,gram=False):
     if (poly):
         return np.einsum('ij,kj->ik',X,Y) ** d;
     elif (gram):
@@ -148,7 +148,7 @@ else:
             for a, sv_y, sv in zip(sv_multipliers, support_vectors_y, support_vectors):
                 s += a * sv_y * kernel(np.array([x_contour[i],y_contour[j]]), sv, poly=poly_kernel)
             z[i][j] = np.sign(s + b)
-
+            
             
 plt.contour(x_contour,y_contour,z.T,[0]);
 
