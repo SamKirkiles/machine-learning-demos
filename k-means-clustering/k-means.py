@@ -7,7 +7,7 @@ import numpy as np;
 k = 2
 
 #We don't need the y because we are using unsupervised learning
-X,y = make_blobs(n_samples=100,n_features=2,centers=k,cluster_std=1.0,random_state=2)
+X,y = make_blobs(n_samples=100,n_features=2,centers=k,cluster_std=1.0,random_state=50)
 
 c = X[np.random.randint(X.shape[0],size=k)]
 m = X.shape[0]
@@ -29,7 +29,7 @@ for i in range(0,1000):
     tempc = c
     
     for j in range(0,k):
-        X_out[:,j] = np.sqrt(np.sum(((X[:,:]-c[j,:])**2),axis=1))
+        X_out[:,j] = np.sum(np.sqrt(((X[:,:]-c[j,:])**2)),axis=1)
         
     y_out[:,0] = np.asarray([X_out[:,0]>X_out[:,1]])        
     y_out[:,1] = np.asarray([X_out[:,1]>X_out[:,0]])
