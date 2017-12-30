@@ -7,7 +7,7 @@ import matplotlib.image as mpimg
 # This will create a matrix with positions and RGB (x1,x2,x3) 
 # Features will be x, y, r, g, b
 # Each pixel will be a shape
-img = mpimg.imread('panda.png')[:,:,:3];
+img = mpimg.imread('download.png')[:,:,:3];
 plt.imshow(img)
 plt.show()
 
