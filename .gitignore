@@ -3,6 +3,9 @@
 .AppleDouble
 .LSOverride
 
+octave-workspace
+token.mat
+
 # Icon must end with two \r
 Icon
 
